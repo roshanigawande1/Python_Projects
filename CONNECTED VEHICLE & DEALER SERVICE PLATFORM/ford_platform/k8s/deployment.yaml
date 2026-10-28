@@ -1,0 +1,65 @@
+# k8s/deployment.yaml
+#
+# Describes how Kubernetes should run our API in production:
+#  - Deployment: keep 3 identical pods (copies of the container) running at all times
+#  - HorizontalPodAutoscaler (HPA): automatically add/remove pods based on CPU load
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ford-api
+spec:
+  replicas: 3   # Start with 3 copies of the API running for redundancy
+  selector:
+    matchLabels:
+      app: ford-api
+  template:
+    metadata:
+      labels:
+        app: ford-api
+    spec:
+      containers:
+        - name: api
+          image: registry.example.com/ford-api:1.0.0   # Built from our Dockerfile, pushed to a registry
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: ford-api-secret   # Secret is injected at deploy time, never stored in Git
+                  key: django-secret
+          readinessProbe:        # "Is this pod ready to receive traffic?"
+            httpGet:
+              path: /health/
+              port: 8000
+          livenessProbe:         # "Is this pod still alive, or does it need restarting?"
+            httpGet:
+              path: /health/
+              port: 8000
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ford-api-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ford-api
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70   # Add more pods once average CPU crosses 70%

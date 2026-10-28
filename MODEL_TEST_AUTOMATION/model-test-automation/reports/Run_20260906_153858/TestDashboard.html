@@ -1,0 +1,12 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Model Test Dashboard</title>
+<style>body{font-family:Arial;margin:32px;color:#1f2937}table{border-collapse:collapse;width:100%}th,td{padding:10px;border-bottom:1px solid #d1d5db;text-align:left}th{background:#1f4e78;color:white}.cards{display:flex;gap:12px;margin:18px 0}.card{padding:16px;border:1px solid #d1d5db;border-radius:8px;min-width:100px}.card b{font-size:24px}</style>
+</head><body><h1>Model Test Dashboard</h1><div class="cards" id="cards"></div>
+<table><thead><tr><th>Model</th><th>Test ID</th><th>Status</th><th>Details</th></tr></thead><tbody><tr><td>BrakeModel</td><td>TC_001</td><td>PASS</td><td>All expected outputs matched.</td></tr>
+<tr><td>BrakeModel</td><td>TC_002</td><td>FAIL</td><td>VehicleSpeed: expected 0.0, actual 4.2</td></tr>
+<tr><td>BrakeModel</td><td>TC_003</td><td>PASS</td><td>All expected outputs matched.</td></tr>
+<tr><td>EngineModel</td><td>TC_001</td><td>PASS</td><td>All expected outputs matched.</td></tr>
+<tr><td>EngineModel</td><td>TC_002</td><td>PASS</td><td>All expected outputs matched.</td></tr>
+<tr><td>EngineModel</td><td>TC_003</td><td>PASS</td><td>All expected outputs matched.</td></tr></tbody></table>
+<script>const counts={"PASS": 5, "FAIL": 1}; document.getElementById('cards').innerHTML=Object.entries(counts).map(([key,value])=>`<div class="card"><div>${key}</div><b>${value}</b></div>`).join('');</script>
+</body></html>

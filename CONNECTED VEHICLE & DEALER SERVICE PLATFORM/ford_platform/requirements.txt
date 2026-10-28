@@ -1,0 +1,12 @@
+# --- Core web framework ---
+Django>=5.0,<6.0                 # The main web framework: handles URL routing, ORM, admin panel, etc.
+djangorestframework>=3.15        # Adds REST API tooling on top of Django: serializers, viewsets, auth, throttling
+
+# --- Database drivers ---
+psycopg[binary]>=3.1             # PostgreSQL driver (needed only if/when you switch DB_ENGINE=postgres in .env)
+
+# --- Production web server ---
+gunicorn>=22                     # Production-grade WSGI server used to actually run Django in Docker/Kubernetes
+
+# --- Environment variable loading ---
+python-dotenv>=1.0               # Lets settings.py read values from a .env file during local development

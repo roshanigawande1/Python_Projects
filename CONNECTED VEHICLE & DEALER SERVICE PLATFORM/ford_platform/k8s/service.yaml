@@ -1,0 +1,17 @@
+# k8s/service.yaml
+#
+# A Kubernetes Service gives all the "ford-api" pods ONE stable internal address/name,
+# and load-balances traffic across whichever pods are currently healthy — even as pods
+# are added, removed, or restarted by the Deployment/HPA above.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ford-api
+spec:
+  selector:
+    app: ford-api        # Routes traffic to any pod with this label
+  ports:
+    - port: 80            # Port other services use to reach this Service
+      targetPort: 8000     # Port the container actually listens on
+  type: ClusterIP          # Only reachable inside the cluster; an Ingress/Gateway exposes it externally

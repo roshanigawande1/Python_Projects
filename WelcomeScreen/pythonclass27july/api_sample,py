@@ -1,0 +1,27 @@
+
+import requests
+import time
+
+def get_data():
+    API_URL="https://jsonplaceholder.typicode.com/posts"
+    resp=requests.get(API_URL)
+    #print(resp)
+    if resp.status_code == 200:
+        data=resp.json()
+        return data
+    else:
+        print('Error:',resp.status_code)
+'''
+#print(get_data())
+post=get_data()
+if post:
+   for i in range(0,100,1):
+    time.sleep(2)
+    print('UserID:',post[i]['userId'])
+    print('ID:',post[i]['id'])
+    print('Title:',post[i]['title'])
+    print('Body:',post[i]['body'])
+    print()
+else:
+    print('Failed to fetch the data')
+    '''
